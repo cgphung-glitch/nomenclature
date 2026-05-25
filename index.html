@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Chemical Nomenclature Practice</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --bg: #f4f7fb;
+    --surface: #ffffff;
+    --surface-2: #f8fafc;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #dbe3ee;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --accent: #0f766e;
+    --success: #166534;
+    --success-bg: #ecfdf3;
+    --error: #b42318;
+    --error-bg: #fef3f2;
+    --shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+    --radius: 16px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top left, #dbeafe 0%, transparent 28%),
+      radial-gradient(circle at top right, #e0f2fe 0%, transparent 26%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  .hero {
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    margin: 0 0 10px;
+    font-size: clamp(1.8rem, 2vw + 1rem, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #0f172a;
+  }
+
+  .hero p {
+    margin: 0;
+    max-width: 760px;
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .app-card {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.65);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+  }
+
+  .controls-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .field-group {
+    display: grid;
+    gap: 8px;
+  }
+
+  label {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+
+  select,
+  input[type="text"] {
+    width: 100%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  }
+
+  select:focus,
+  input[type="text"]:focus {
+    border-color: #93c5fd;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+  }
+
+  #prompt {
+    margin: 4px 0 2px;
+    padding: 18px 20px;
+    background: linear-gradient(180deg, #f8fbff 0%, #f1f5f9 100%);
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #0f172a;
+    min-height: 78px;
+    display: flex;
+    align-items: center;
+  }
+
+  .formula {
+    font-family: "Times New Roman", Georgia, serif;
+    font-size: 1.08em;
+  }
+
+  .answer-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .button-row,
+  .resource-row,
+  .rules-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  button {
+    appearance: none;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.96rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.14s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+  }
+
+  button:active {
+    transform: translateY(0);
+  }
+
+  button:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.18);
+  }
+
+  #checkBtn {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
+  }
+
+  #checkBtn:hover {
+    background: var(--primary-hover);
+  }
+
+  #nextBtn {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 8px 18px rgba(15, 118, 110, 0.22);
+  }
+
+  #nextBtn:hover {
+    background: #0b5e57;
+  }
+
+  #showAnsBtn {
+    background: #fff7ed;
+    color: #9a3412;
+    border-color: #fed7aa;
+  }
+
+  #showAnsBtn:hover {
+    background: #ffedd5;
+  }
+
+  #showIonsBtn,
+  #showPrefixesBtn,
+  #showIonicRulesBtn,
+  #showMolecularRulesBtn,
+  #showAcidRulesBtn,
+  #showHydrateRulesBtn {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  #showIonsBtn:hover,
+  #showPrefixesBtn:hover,
+  #showIonicRulesBtn:hover,
+  #showMolecularRulesBtn:hover,
+  #showAcidRulesBtn:hover,
+  #showHydrateRulesBtn:hover {
+    background: var(--surface-2);
+    border-color: #cbd5e1;
+  }
+
+  #feedback {
+    margin-top: 6px;
+    min-height: 60px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 0.98rem;
+    border: 1px solid transparent;
+    background: transparent;
+  }
+
+  #feedback.correct {
+    color: var(--success);
+    background: var(--success-bg);
+    border-color: #b7ebc6;
+  }
+
+  #feedback.incorrect {
+    color: var(--error);
+    background: var(--error-bg);
+    border-color: #f7c3bd;
+  }
+
+  .section-label {
+    margin: 10px 0 2px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.50);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: white;
+    margin: 3vh auto 0;
+    padding: 20px;
+    width: min(760px, 100%);
+    max-height: 86vh;
+    overflow: auto;
+    border-radius: 20px;
+    box-shadow: 0 25px 70px rgba(2, 6, 23, 0.28);
+    border: 1px solid #e5e7eb;
+  }
+
+  .modal-content h2 {
+    margin-top: 10px;
+    margin-bottom: 12px;
+    font-size: 1.35rem;
+    color: #0f172a;
+  }
+
+  .modal-content button {
+    background: #f8fafc;
+    color: #334155;
+    border: 1px solid #dbe3ee;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  th, td {
+    border: 1px solid #e5e7eb;
+    padding: 10px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: #f8fafc;
+    color: #334155;
+    font-weight: 800;
+  }
+
+  tr:nth-child(even) td {
+    background: #fcfdff;
+  }
+
+  ul {
+    padding-left: 1.2rem;
+  }
+
+  li + li {
+    margin-top: 0.45rem;
+  }
+
+  code {
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 0.12rem 0.35rem;
+    border-radius: 6px;
+    font-size: 0.92em;
+  }
+
+  @media (min-width: 720px) {
+    .controls-grid {
+      gap: 20px;
+    }
+
+    .answer-row {
+      grid-template-columns: 1fr auto auto auto;
+      align-items: end;
+    }
+
+    .answer-row label {
+      grid-column: 1 / -1;
+    }
+
+    #answer {
+      min-width: 280px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .page {
+      padding: 18px 12px 32px;
+    }
+
+    .app-card {
+      padding: 16px;
+      border-radius: 18px;
+    }
+
+    #prompt {
+      font-size: 1.1rem;
+      min-height: 70px;
+      padding: 14px 16px;
+    }
+
+    .button-row,
+    .resource-row,
+    .rules-row {
+      flex-direction: column;
+    }
+
+    .button-row button,
+    .resource-row button,
+    .rules-row button {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="page">
+    <div class="hero">
+      <h1>Chemical Nomenclature Practice</h1>
+      <p>
+        Choose a practice type, then either name the species or write its formula.
+        Enter subscripts as regular numbers (for example, CaCl2) and charges using ^ symbol
+        when needed (for example, Fe^3+). For +1 and -1 ions, the ^ symbol is not needed.
+        For hydrates, use the asterisk * as the center dot (for example, KNO3*2H2O).
+      </p>
+    </div>
+
+    <div class="app-card">
+      <label for="mode">Practice type:</label>
+      <select id="mode">
+      <option value="1">1. Name the ion (formula → name)</option>
+      <option value="2">2. Write ion formula (name → formula)</option>
+      <option value="3">3. Name ionic compound</option>
+      <option value="4">4. Write ionic compound formula</option>
+      <option value="5">5. Name molecular binary compound</option>
+      <option value="6">6. Write molecular binary formula</option>
+      <option value="7">7. Name acid (binary/oxy)</option>
+      <option value="8">8. Write acid formula</option>
+      <option value="9">9. Name hydrate</option>
+      <option value="10">10. Write hydrate formula</option>
+    </div>
+  </div>
+</select>
+
+<div id="prompt"></div>
+
+<div class="answer-row">
+  <label for="answer">Your answer:</label>
+  <input id="answer" type="text" size="40" autocomplete="off">
+  <button id="checkBtn" type="button">Check Answer</button>
+  <button id="nextBtn" type="button">Next Question</button>
+  <button id="showAnsBtn" type="button">Show Correct Answer</button>
+</div>
+
+<div id="feedback"></div>
+
+<div class="section-label">Reference tools</div>
+<div class="resource-row">
+  <button id="showIonsBtn" type="button">Show Ion Table</button>
+  <button id="showPrefixesBtn" type="button">Show Prefixes</button>
+</div>
+
+<h2>Chemical Nomenclature Rules</h2>
+
+<div class="section-label">Naming rules</div>
+<div class="rules-row">
+  <button id="showIonicRulesBtn" type="button">Naming Ionic Compounds</button>
+  <button id="showMolecularRulesBtn" type="button">Naming Molecular Compounds</button>
+  <button id="showAcidRulesBtn" type="button">Naming Acids</button>
+  <button id="showHydrateRulesBtn" type="button">Naming Hydrates</button>
+</div>
+
+<!-- Ion table modal -->
+<div id="ionModal" class="modal">
+  <div class="modal-content">
+    <button onclick="document.getElementById('ionModal').style.display='none'">
+      Close
+    </button>
+    <h2>Ions used in practice</h2>
+    <div id="ionTable"></div>
+  </div>
+</div>
+
+<!-- Prefix modal -->
+<div id="prefixModal" class="modal">
+  <div class="modal-content">
+    <button onclick="document.getElementById('prefixModal').style.display='none'">
+      Close
+    </button>
+    <h2>Greek prefixes</h2>
+    <div id="prefixTable"></div>
+  </div>
+</div>
+
+<!-- Rules modal -->
+<div id="rulesModal" class="modal">
+  <div class="modal-content">
+    <button onclick="document.getElementById('rulesModal').style.display='none'">
+      Close
+    </button>
+    <h2 id="rulesTitle"></h2>
+    <div id="rulesContent"></div>
+  </div>
+</div>
+
+<script>
+// ====== DATA ======
+const ions = {
+  cations: [
+    { formula: 'Li+',    name: 'lithium ion', stock: null },
+    { formula: 'Na+',    name: 'sodium ion', stock: null },
+    { formula: 'K+',     name: 'potassium ion', stock: null },
+    { formula: 'Rb+',    name: 'rubidium ion', stock: null },
+    { formula: 'Cs+',    name: 'cesium ion', stock: null },
+    { formula: 'Ag+',    name: 'silver ion', stock: null },
+
+    { formula: 'Mg^2+',  name: 'magnesium ion', stock: null },
+    { formula: 'Ca^2+',  name: 'calcium ion', stock: null },
+    { formula: 'Sr^2+',  name: 'strontium ion', stock: null },
+    { formula: 'Ba^2+',  name: 'barium ion', stock: null },
+    { formula: 'Zn^2+',  name: 'zinc ion', stock: null },
+    { formula: 'Cd^2+',  name: 'cadmium ion', stock: null },
+    { formula: 'Al^3+',  name: 'aluminum ion', stock: null },
+
+    { formula: 'Ti^3+',  name: 'titanium(III) ion', stock: 'titanium(III)' },
+    { formula: 'Ti^4+',  name: 'titanium(IV) ion', stock: 'titanium(IV)' },
+    { formula: 'V^2+',   name: 'vanadium(II) ion', stock: 'vanadium(II)' },
+    { formula: 'V^3+',   name: 'vanadium(III) ion', stock: 'vanadium(III)' },
+    { formula: 'V^4+',   name: 'vanadium(IV) ion', stock: 'vanadium(IV)' },
+    { formula: 'V^5+',   name: 'vanadium(V) ion', stock: 'vanadium(V)' },
+    { formula: 'Cr^2+',  name: 'chromium(II) ion', stock: 'chromium(II)' },
+    { formula: 'Cr^3+',  name: 'chromium(III) ion', stock: 'chromium(III)' },
+    { formula: 'Mn^2+',  name: 'manganese(II) ion', stock: 'manganese(II)' },
+    { formula: 'Mn^3+',  name: 'manganese(III) ion', stock: 'manganese(III)' },
+    { formula: 'Fe^2+',  name: 'iron(II) ion', stock: 'iron(II)' },
+    { formula: 'Fe^3+',  name: 'iron(III) ion', stock: 'iron(III)' },
+    { formula: 'Co^2+',  name: 'cobalt(II) ion', stock: 'cobalt(II)' },
+    { formula: 'Co^3+',  name: 'cobalt(III) ion', stock: 'cobalt(III)' },
+    { formula: 'Ni^2+',  name: 'nickel(II) ion', stock: 'nickel(II)' },
+    { formula: 'Ni^3+',  name: 'nickel(III) ion', stock: 'nickel(III)' },
+    { formula: 'Cu+',    name: 'copper(I) ion', stock: 'copper(I)' },
+    { formula: 'Cu^2+',  name: 'copper(II) ion', stock: 'copper(II)' },
+    { formula: 'As^3+',  name: 'arsenic(III) ion', stock: 'arsenic(III)' },
+    { formula: 'As^5+',  name: 'arsenic(V) ion', stock: 'arsenic(V)' },
+    { formula: 'Hg2^2+', name: 'mercury(I) ion', stock: 'mercury(I)' },
+    { formula: 'Hg^2+',  name: 'mercury(II) ion', stock: 'mercury(II)' },
+    { formula: 'Sn^2+',  name: 'tin(II) ion', stock: 'tin(II)' },
+    { formula: 'Sn^4+',  name: 'tin(IV) ion', stock: 'tin(IV)' },
+    { formula: 'Pb^2+',  name: 'lead(II) ion', stock: 'lead(II)' },
+    { formula: 'Pb^4+',  name: 'lead(IV) ion', stock: 'lead(IV)' },
+    { formula: 'Ga^3+',  name: 'gallium(III) ion', stock: 'gallium(III)' },
+
+    { formula: 'UO2^2+', name: 'uranyl ion', stock: null },
+    { formula: 'VO^2+',  name: 'vanadyl ion', stock: null },
+    { formula: 'TiO^2+', name: 'titanyl ion', stock: null },
+    { formula: 'CrO2^2+', name: 'chromyl ion', stock: null },
+    { formula: 'NpO2^2+', name: 'neptunyl ion', stock: null },
+    { formula: 'PuO2^2+', name: 'plutonyl ion', stock: null },
+
+    { formula: 'NH4+',   name: 'ammonium ion', stock: null },
+    { formula: 'PH4+',   name: 'phosphonium ion', stock: null },
+    { formula: 'NO+',    name: 'nitrosonium ion', stock: null },
+    { formula: 'NO2+',   name: 'nitronium ion', stock: null }
+  ],
+
+  anions: [
+    { formula: 'F-',       name: 'fluoride ion' },
+    { formula: 'Cl-',      name: 'chloride ion' },
+    { formula: 'Br-',      name: 'bromide ion' },
+    { formula: 'I-',       name: 'iodide ion' },
+    { formula: 'H-',       name: 'hydride ion' },
+
+    { formula: 'O^2-',     name: 'oxide ion' },
+    { formula: 'O2^2-',    name: 'peroxide ion' },
+    { formula: 'S^2-',     name: 'sulfide ion' },
+    { formula: 'Se^2-',    name: 'selenide ion' },
+    { formula: 'N^3-',     name: 'nitride ion' },
+    { formula: 'P^3-',     name: 'phosphide ion' },
+    { formula: 'C^4-',     name: 'carbide ion' },
+    { formula: 'Si^4-',    name: 'silicide ion' },
+    { formula: 'Te^2-',    name: 'telluride ion' },
+
+    { formula: 'C2H3O2-',  name: 'acetate ion' },
+    { formula: 'MnO4-',    name: 'permanganate ion' },
+    { formula: 'BO3^3-',   name: 'borate ion' },
+    { formula: 'CrO4^2-',  name: 'chromate ion' },
+    { formula: 'Cr2O7^2-', name: 'dichromate ion' },
+    { formula: 'C2O4^2-',  name: 'oxalate ion' },
+    { formula: 'OH-',      name: 'hydroxide ion' },
+    { formula: 'CN-',      name: 'cyanide ion' },
+    { formula: 'OCN-',     name: 'cyanate ion' },
+    { formula: 'SCN-',     name: 'thiocyanate ion' },
+    { formula: 'NO3-',     name: 'nitrate ion' },
+    { formula: 'NO2-',     name: 'nitrite ion' },
+    { formula: 'HSO4-',    name: 'hydrogen sulfate ion' },
+    { formula: 'HSO3-',    name: 'hydrogen sulfite ion' },
+    { formula: 'S2O3^2-',  name: 'thiosulfate ion' },
+    { formula: 'SO4^2-',   name: 'sulfate ion' },
+    { formula: 'SO3^2-',   name: 'sulfite ion' },
+
+    { formula: 'AsO3^3-',  name: 'arsenite ion' },
+    { formula: 'AsO4^3-',  name: 'arsenate ion' },
+    { formula: 'SiO4^4-',  name: 'silicate ion' },
+    { formula: 'CO3^2-',   name: 'carbonate ion' },
+    { formula: 'HCO3-',    name: 'hydrogen carbonate ion' },
+    { formula: 'HPO4^2-',  name: 'hydrogen phosphate ion' },
+    { formula: 'H2PO4-',   name: 'dihydrogen phosphate ion' },
+
+    { formula: 'ClO4-',    name: 'perchlorate ion' },
+    { formula: 'ClO3-',    name: 'chlorate ion' },
+    { formula: 'ClO2-',    name: 'chlorite ion' },
+    { formula: 'ClO-',     name: 'hypochlorite ion' },
+
+    { formula: 'BrO4-',    name: 'perbromate ion' },
+    { formula: 'BrO3-',    name: 'bromate ion' },
+    { formula: 'BrO2-',    name: 'bromite ion' },
+    { formula: 'BrO-',     name: 'hypobromite ion' },
+
+    { formula: 'IO4-',     name: 'periodate ion' },
+    { formula: 'IO3-',     name: 'iodate ion' },
+    { formula: 'IO2-',     name: 'iodite ion' },
+    { formula: 'IO-',      name: 'hypoiodite ion' },
+
+    { formula: 'PO4^3-',   name: 'phosphate ion' },
+    { formula: 'PO3^3-',   name: 'phosphite ion' }
+  ]
+};
+
+const molecularPrefixes = [
+  { prefix: 'mono',  value: 1 },
+  { prefix: 'di',    value: 2 },
+  { prefix: 'tri',   value: 3 },
+  { prefix: 'tetra', value: 4 },
+  { prefix: 'penta', value: 5 },
+  { prefix: 'hexa',  value: 6 },
+  { prefix: 'hepta', value: 7 },
+  { prefix: 'octa',  value: 8 },
+  { prefix: 'nona',  value: 9 },
+  { prefix: 'deca',  value: 10 }
+];
+
+const molecularOrder = ['C', 'P', 'N', 'H', 'S', 'I', 'Br', 'Cl', 'O', 'F'];
+
+const binaryNonMetals = [
+  { symbol: 'C',  baseName: 'carbon',    anionName: 'carbide' },
+  { symbol: 'N',  baseName: 'nitrogen',  anionName: 'nitride' },
+  { symbol: 'O',  baseName: 'oxygen',    anionName: 'oxide' },
+  { symbol: 'F',  baseName: 'fluorine',  anionName: 'fluoride' },
+  { symbol: 'Si', baseName: 'silicon',   anionName: 'silicide' },
+  { symbol: 'S',  baseName: 'sulfur',    anionName: 'sulfide' },
+  { symbol: 'P',  baseName: 'phosphorus',anionName: 'phosphide' },
+  { symbol: 'Cl', baseName: 'chlorine',  anionName: 'chloride' },
+  { symbol: 'As', baseName: 'arsenic',   anionName: 'arsenide' },
+  { symbol: 'Se', baseName: 'selenium',  anionName: 'selenide' },
+  { symbol: 'I',  baseName: 'iodine',    anionName: 'iodide' },
+  { symbol: 'Br', baseName: 'bromine',   anionName: 'bromide' }
+];
+
+const acids = [
+  { formula: 'HCl',     name: 'hydrochloric acid',  type: 'binary' },
+  { formula: 'HBr',     name: 'hydrobromic acid',   type: 'binary' },
+  { formula: 'HI',      name: 'hydroiodic acid',    type: 'binary' },
+  { formula: 'HF',      name: 'hydrofluoric acid',  type: 'binary' },
+  { formula: 'H2Se',    name: 'hydroselenic acid',  type: 'binary' },
+  { formula: 'H2S',     name: 'hydrosulfuric acid', type: 'binary' },
+  { formula: 'HCN',     name: 'hydrocyanic acid',   type: 'binary' },
+  { formula: 'H2CO3',   name: 'carbonic acid',      type: 'oxy' },
+  { formula: 'H2CrO4',  name: 'chromic acid',       type: 'oxy' },
+  { formula: 'H2Cr2O7', name: 'dichromic acid',     type: 'oxy' },
+  { formula: 'HMnO4',   name: 'permanganic acid',   type: 'oxy' },
+  { formula: 'HClO4',   name: 'perchloric acid',    type: 'oxy' },
+  { formula: 'HClO3',   name: 'chloric acid',       type: 'oxy' },
+  { formula: 'HClO2',   name: 'chlorous acid',      type: 'oxy' },
+  { formula: 'HClO',    name: 'hypochlorous acid',  type: 'oxy' },
+  { formula: 'HBrO4',   name: 'perbromic acid',     type: 'oxy' },
+  { formula: 'HBrO3',   name: 'bromic acid',        type: 'oxy' },
+  { formula: 'HBrO2',   name: 'bromous acid',       type: 'oxy' },
+  { formula: 'HBrO',    name: 'hypobromous acid',   type: 'oxy' },
+  { formula: 'HIO4',    name: 'periodic acid',      type: 'oxy' },
+  { formula: 'HIO3',    name: 'iodic acid',         type: 'oxy' },
+  { formula: 'HIO2',    name: 'iodous acid',        type: 'oxy' },
+  { formula: 'HIO',     name: 'hypoiodous acid',    type: 'oxy' },
+  { formula: 'H2SO4',   name: 'sulfuric acid',      type: 'oxy' },
+  { formula: 'H2SO3',   name: 'sulfurous acid',     type: 'oxy' },
+  { formula: 'H4SiO4',  name: 'silicic acid',       type: 'oxy' },
+  { formula: 'H2SeO4',  name: 'selenic acid',       type: 'oxy' },
+  { formula: 'H2SeO3',  name: 'selenous acid',      type: 'oxy' },
+  { formula: 'H3PO3',   name: 'phosphorous acid',   type: 'oxy' },
+  { formula: 'H3PO4',   name: 'phosphoric acid',    type: 'oxy' }
+];
+
+const hydrates = [
+  { anhydrous: 'CuSO4',   water: 5,  name: 'copper(II) sulfate pentahydrate' },
+  { anhydrous: 'BaCl2',   water: 2,  name: 'barium chloride dihydrate' },
+  { anhydrous: 'CoCl2',   water: 6,  name: 'cobalt(II) chloride hexahydrate' },
+  { anhydrous: 'CaCl2',   water: 2,  name: 'calcium chloride dihydrate' },
+  { anhydrous: 'CaCl2',   water: 6,  name: 'calcium chloride hexahydrate' },
+  { anhydrous: 'NiCl2',   water: 6,  name: 'nickel(II) chloride hexahydrate' },
+  { anhydrous: 'FeCl2',   water: 4,  name: 'iron(II) chloride tetrahydrate' },
+  { anhydrous: 'FeCl3',   water: 6,  name: 'iron(III) chloride hexahydrate' },
+  { anhydrous: 'FeCl3',   water: 9,  name: 'iron(III) chloride nonahydrate' },
+  { anhydrous: 'Na2CO3',  water: 10, name: 'sodium carbonate decahydrate' },
+  { anhydrous: 'Na2SO4',  water: 10, name: 'sodium sulfate decahydrate' },
+  { anhydrous: 'CaSO4',   water: 2,  name: 'calcium sulfate dihydrate' },
+  { anhydrous: 'FeSO4',   water: 7,  name: 'iron(II) sulfate heptahydrate' },
+  { anhydrous: 'ZnSO4',   water: 7,  name: 'zinc sulfate heptahydrate' },
+  { anhydrous: 'MnSO4',   water: 1,  name: 'manganese(II) sulfate monohydrate' },
+  { anhydrous: 'Ba(OH)2', water: 8,  name: 'barium hydroxide octahydrate' },
+  { anhydrous: 'K2Cr2O7', water: 3,  name: 'potassium dichromate trihydrate' },
+  { anhydrous: 'ZnCl2',   water: 3,  name: 'zinc chloride trihydrate' },
+  { anhydrous: 'AlCl3',   water: 6,  name: 'aluminum chloride hexahydrate' },
+  { anhydrous: 'AlCl3',   water: 3,  name: 'aluminum chloride trihydrate' },
+  { anhydrous: 'AlCl3',   water: 9,  name: 'aluminum chloride nonahydrate' },
+  { anhydrous: 'GaCl3',   water: 9,  name: 'gallium(III) chloride nonahydrate' },
+  { anhydrous: 'MgSO4',   water: 7,  name: 'magnesium sulfate heptahydrate' }
+];
+
+const namingRules = {
+  ionic: {
+    title: 'Rules for Naming Ionic Compounds',
+    html: `
+      <ul>
+        <li>Name the <strong>cation first</strong>, then the <strong>anion</strong>.</li>
+        <li>For monatomic cations, use the element name; for monatomic anions, change the ending to <strong>-ide</strong>.</li>
+        <li>For polyatomic ions, keep the ion name unchanged, such as nitrate, sulfate, or hydroxide.</li>
+        <li>If the metal can have more than one charge, include a <strong>Roman numeral</strong>, as in iron(III) chloride.</li>
+        <li>Do <strong>not</strong> use prefixes like mono-, di-, or tri- for ionic compounds.</li>
+      </ul>
+      <p><strong>Example:</strong> FeCl3 = iron(III) chloride.</p>
+    `
+  },
+
+  molecular: {
+    title: 'Rules for Naming Molecular Compounds',
+    html: `
+      <ul>
+        <li>The <strong>less electronegative element</strong> is written and named first.</li>
+        <li>Use prefixes to show the number of atoms: mono-, di-, tri-, tetra-, penta-, and so on.</li>
+        <li>Do <strong>not</strong> use <strong>mono-</strong> for the first element.</li>
+        <li>The second element gets an <strong>-ide</strong> ending and always keeps its prefix.</li>
+        <li>Drop the final vowel in a prefix when needed, such as monoxide instead of monooxide and tetroxide instead of tetraoxide.</li>
+      </ul>
+      <p><strong>Example:</strong> N2O4 = dinitrogen tetroxide. </p>
+    `
+  },
+
+  acids: {
+    title: 'Rules for Naming Acids',
+    html: `
+      <ul>
+        <li>If the acid contains <strong>no oxygen</strong>, use <strong>hydro-</strong> + root + <strong>-ic acid</strong>.</li>
+        <li>Examples: HCl = hydrochloric acid, HBr = hydrobromic acid.</li>
+        <li>If the oxyanion ends in <strong>-ate</strong>, the acid ends in <strong>-ic</strong>.</li>
+        <li>If the oxyanion ends in <strong>-ite</strong>, the acid ends in <strong>-ous</strong>.</li>
+        <li>Do not use the prefix <strong>hydro-</strong> for oxyacids.</li>
+      </ul>
+      <p><strong>Examples:</strong> HNO3 = nitric acid; HNO2 = nitrous acid.</p>
+    `
+  },
+
+  hydrates: {
+    title: 'Rules for Naming Hydrates',
+    html: `
+      <ul>
+        <li>Name the ionic compound first.</li>
+        <li>Then add a prefix showing the number of water molecules followed by <strong>hydrate</strong>.</li>
+        <li>Common prefixes include mono-, di-, tri-, tetra-, penta-, hexa-, hepta-, octa-, nona-, and deca-.</li>
+        <li>In formulas, write the compound formula, then a centered dot, then the number of water molecules and H2O.</li>
+      </ul>
+      <p><strong>Example:</strong> CuSO4·5H2O = copper(II) sulfate pentahydrate.</p>
+    `
+  }
+};
+
+// ====== FORMULA / ION UTILITIES ======
+function randomItem(arr) {
+  if (!Array.isArray(arr) || arr.length === 0) {
+    throw new Error('randomItem received an invalid or empty array');
+  }
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+function splitFormulaAndCharge(raw) {
+  let s = String(raw || '').trim();
+  if (!s) return { base: '', charge: '' };
+
+  // normalize accidental single-charge caret notation
+  s = s.replace(/\^1(?=[+-]$)/, '');
+
+  // explicit multi-charge only with caret, e.g. Fe^2+, SO4^2-
+  const caretMatch = s.match(/\^(\d+)([+-])$/);
+  if (caretMatch) {
+    return {
+      base: s.slice(0, s.length - caretMatch[0].length),
+      charge: caretMatch[1] + caretMatch[2]
+    };
+  }
+
+  // trailing + or - means a single charge only
+  const lastChar = s.slice(-1);
+  if (lastChar === '+' || lastChar === '-') {
+    return {
+      base: s.slice(0, -1),
+      charge: lastChar
+    };
+  }
+
+  return { base: s, charge: '' };
+}
+
+function renderFormula(raw) {
+  const parts = splitFormulaAndCharge(raw);
+  let base = parts.base;
+  const charge = parts.charge;
+
+  base = base
+    .replace(/\*/g, '·')
+    .replace(/([A-Za-z\)])(\d+)/g, '$1<sub>$2</sub>');
+
+  return '<span class="formula">' +
+    base +
+    (charge ? '<sup>' + charge + '</sup>' : '') +
+    '</span>';
+}
+
+function renderUserFormulaInput(str) {
+  return renderFormula(str);
+}
+
+function normalizeFormulaInput(str) {
+  let s = String(str || '').trim().replace(/\s+/g, '').toUpperCase();
+  s = s.replace(/[·*]/g, '·');
+  s = s.replace(/\^1(?=[+-]$)/, '');
+  return s;
+}
+
+function normalizeNameInput(str) {
+  return String(str || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\u00A0/g, ' ')
+    .replace(/\s+/g, ' ')
+    .replace(/\s*,\s*/g, ', ')
+    .replace(/\s*\(\s*/g, '(')
+    .replace(/\s*\)\s*/g, ')');
+}
+
+function isPolyatomicIon(baseFormula) {
+  if (baseFormula.includes('(') || baseFormula.includes(')')) return true;
+  const matches = baseFormula.match(/[A-Z][a-z]?/g) || [];
+  return matches.length > 1;
+}
+
+function gcd(a, b) {
+  a = Math.abs(a);
+  b = Math.abs(b);
+  while (b !== 0) {
+    const t = b;
+    b = a % b;
+    a = t;
+  }
+  return a || 1;
+}
+
+function chargeValue(formulaWithCharge) {
+  const parts = splitFormulaAndCharge(formulaWithCharge);
+  const charge = parts.charge;
+
+  if (!charge) return 0;
+  if (charge === '+') return 1;
+  if (charge === '-') return -1;
+
+  const m = charge.match(/^(\d+)([+-])$/);
+  if (!m) return 0;
+
+  const mag = parseInt(m[1], 10);
+  return m[2] === '+' ? mag : -mag;
+}
+
+function makeIonicCompound(cation, anion) {
+  const cCharge = Math.abs(chargeValue(cation.formula));
+  const aCharge = Math.abs(chargeValue(anion.formula));
+
+  const cBase = splitFormulaAndCharge(cation.formula).base;
+  const aBase = splitFormulaAndCharge(anion.formula).base;
+
+  if (!cCharge || !aCharge) {
+    return { formula: '', name: '' };
+  }
+
+  const div = gcd(cCharge, aCharge);
+  const cCount = aCharge / div;
+  const aCount = cCharge / div;
+
+  let cPart = cBase;
+  let aPart = aBase;
+
+  if (isPolyatomicIon(cBase) && cCount > 1) {
+    cPart = '(' + cBase + ')';
+  }
+  if (isPolyatomicIon(aBase) && aCount > 1) {
+    aPart = '(' + aBase + ')';
+  }
+
+  const formula =
+    cPart + (cCount > 1 ? cCount : '') +
+    aPart + (aCount > 1 ? aCount : '');
+
+  const catName = cation.stock
+    ? cation.stock
+    : cation.name.replace(/\s+ion$/, '');
+
+  const anName = anion.name.replace(/\s+ion$/, '');
+
+  return {
+    formula: formula,
+    name: catName + ' ' + anName
+  };
+}
+
+// ====== MOLECULAR COMPOUNDS ======
+function orderNonmetalsByConvention(sym1, sym2) {
+  const i1 = molecularOrder.indexOf(sym1);
+  const i2 = molecularOrder.indexOf(sym2);
+
+  if (i1 === -1 || i2 === -1) {
+    // Fallback: keep original order if something is missing
+    return [sym1, sym2];
+  }
+
+  return i1 <= i2 ? [sym1, sym2] : [sym2, sym1];
+}
+
+function makeRandomMolecular() {
+  // Pick two different nonmetals
+  let e1 = randomItem(binaryNonMetals);
+  let e2 = randomItem(binaryNonMetals);
+  while (e2.symbol === e1.symbol) {
+    e2 = randomItem(binaryNonMetals);
+  }
+
+  // Order them so the less electronegative (by convention list) is first
+  const [symFirst, symSecond] = orderNonmetalsByConvention(e1.symbol, e2.symbol);
+
+  // Re-bind element objects so their base/anion names match the ordered symbols
+  let first = binaryNonMetals.find(e => e.symbol === symFirst);
+  let second = binaryNonMetals.find(e => e.symbol === symSecond);
+
+  // Random subscripts 1–3
+  const n1 = Math.floor(Math.random() * 3) + 1;
+  const n2 = Math.floor(Math.random() * 3) + 1;
+
+  // Build formula with ordered symbols
+  const formula =
+    first.symbol + (n1 === 1 ? '' : n1) +
+    second.symbol + (n2 === 1 ? '' : n2);
+
+  function prefix(n, dropMono) {
+    if (n === 1 && dropMono) return '';
+    return molecularPrefixes.find(p => p.value === n).prefix;
+  }
+
+  // First element name: omit "mono" when n1 = 1
+  const p1 = prefix(n1, true);
+  const left = p1 ? (p1 + first.baseName) : first.baseName;
+
+  // Second element uses anion name + always keeps prefix
+  const anionBase = second.anionName || (second.baseName + 'ide');
+  const p2 = prefix(n2, false);
+  const right = p2 + anionBase;
+
+  const name = (left + ' ' + right).replace(/\s+/g, ' ').trim();
+
+  return { formula, name };
+}
+
+function showRules(ruleKey) {
+  const modal = document.getElementById('rulesModal');
+  const title = document.getElementById('rulesTitle');
+  const content = document.getElementById('rulesContent');
+
+  const rule = namingRules[ruleKey];
+  if (!rule) return;
+
+  title.textContent = rule.title;
+  content.innerHTML = rule.html;
+  modal.style.display = 'block';
+}
+
+// ====== QUESTION STATE ======
+
+let currentQuestion = null;
+let attemptCount = 0;
+let isCheckingAnswer = false;
+const MAX_ATTEMPTS_BEFORE_CHECK = 3;
+
+function newQuestion() {
+  const modeEl = document.getElementById('mode');
+  const promptDiv = document.getElementById('prompt');
+  const feedback = document.getElementById('feedback');
+  const answerBox = document.getElementById('answer');
+  const showAnsBtn = document.getElementById('showAnsBtn');
+
+  if (!modeEl || !promptDiv || !feedback || !answerBox || !showAnsBtn) {
+    throw new Error('One or more required DOM elements are missing');
+  }
+
+  const mode = modeEl.value;
+  feedback.textContent = '';
+  feedback.className = '';
+  answerBox.value = '';
+  answerBox.focus();
+
+  attemptCount = 0;
+  showAnsBtn.style.display = 'none';
+
+  switch (mode) {
+    case '1': {
+      const cations = Array.isArray(ions?.cations) ? ions.cations : [];
+      const anions = Array.isArray(ions?.anions) ? ions.anions : [];
+      const pool = cations.concat(anions);
+
+      if (pool.length === 0) {
+        throw new Error('Ion pool is empty or ions object is malformed');
+      }
+
+      const ion = randomItem(pool);
+      currentQuestion = {
+        type: 'nameIon',
+        answer: ion.name,
+        displayFormula: ion.formula
+      };
+      promptDiv.innerHTML = 'Name this ion: ' + renderFormula(ion.formula);
+      break;
+    }
+
+    case '2': {
+      const cations = Array.isArray(ions?.cations) ? ions.cations : [];
+      const anions = Array.isArray(ions?.anions) ? ions.anions : [];
+      const pool = cations.concat(anions);
+
+      if (pool.length === 0) {
+        throw new Error('Ion pool is empty or ions object is malformed');
+      }
+
+      const ion = randomItem(pool);
+      currentQuestion = {
+        type: 'ionFormula',
+        answer: ion.formula
+      };
+      promptDiv.textContent = 'Write the formula for: ' + ion.name;
+      break;
+    }
+
+    case '3': {
+      const c = randomItem(ions.cations);
+      const a = randomItem(ions.anions);
+      const compound = makeIonicCompound(c, a);
+      currentQuestion = {
+        type: 'nameIonicCompound',
+        answer: compound.name,
+        displayFormula: compound.formula
+      };
+      promptDiv.innerHTML = 'Name this ionic compound: ' + renderFormula(compound.formula);
+      break;
+    }
+
+    case '4': {
+      const c = randomItem(ions.cations);
+      const a = randomItem(ions.anions);
+      const compound = makeIonicCompound(c, a);
+      currentQuestion = {
+        type: 'ionicFormula',
+        answer: compound.formula
+      };
+      promptDiv.textContent = 'Write the formula for: ' + compound.name;
+      break;
+    }
+
+    case '5': {
+      const comp = makeRandomMolecular();
+      currentQuestion = {
+        type: 'nameMolecular',
+        answer: comp.name,
+        displayFormula: comp.formula
+      };
+      promptDiv.innerHTML = 'Name this molecular compound: ' + renderFormula(comp.formula);
+      break;
+    }
+
+    case '6': {
+      const comp = makeRandomMolecular();
+      currentQuestion = {
+        type: 'molecularFormula',
+        answer: comp.formula
+      };
+      promptDiv.textContent = 'Write the formula for: ' + comp.name;
+      break;
+    }
+
+    case '7': {
+      const acid = randomItem(acids);
+      currentQuestion = {
+        type: 'nameAcid',
+        answer: acid.name,
+        displayFormula: acid.formula
+      };
+      promptDiv.innerHTML = 'Name this acid: ' + renderFormula(acid.formula);
+      break;
+    }
+
+    case '8': {
+      const acid = randomItem(acids);
+      currentQuestion = {
+        type: 'acidFormula',
+        answer: acid.formula
+      };
+      promptDiv.textContent = 'Write the formula for: ' + acid.name;
+      break;
+    }
+
+    case '9': {
+      const h = randomItem(hydrates);
+      const formula = h.anhydrous + '·' + h.water + 'H2O';
+      currentQuestion = {
+        type: 'nameHydrate',
+        answer: h.name,
+        displayFormula: formula
+      };
+      promptDiv.innerHTML = 'Name this hydrate: ' + renderFormula(formula);
+      break;
+    }
+
+    case '10': {
+      const h = randomItem(hydrates);
+      const formula = h.anhydrous + '·' + h.water + 'H2O';
+      currentQuestion = {
+        type: 'hydrateFormula',
+        answer: formula
+      };
+      promptDiv.textContent = 'Write the formula for: ' + h.name;
+      break;
+    }
+
+    default:
+      throw new Error('Unknown practice mode: ' + mode);
+  }
+}
+
+// ====== CHECKING & FEEDBACK ======
+
+function checkAnswer() {
+  if (!currentQuestion) return;
+
+  attemptCount += 1;
+
+  const ansRaw = document.getElementById('answer').value;
+  const feedback = document.getElementById('feedback');
+  const mode = currentQuestion.type;
+  const showAnsBtn = document.getElementById('showAnsBtn');
+
+  let correct = false;
+  let explanation = '';
+
+  if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+      mode === 'nameMolecular' || mode === 'nameAcid' ||
+      mode === 'nameHydrate') {
+
+    const user = normalizeNameInput(ansRaw);
+    const key = normalizeNameInput(currentQuestion.answer);
+    correct = (user === key);
+
+    if (!correct) {
+      explanation = 'Check capitalization, spaces, and suffixes (-ide, -ate, -ic, etc.).';
+    }
+
+  } else {
+    const userNorm = normalizeFormulaInput(ansRaw);
+    const keyNorm = normalizeFormulaInput(currentQuestion.answer);
+    correct = (userNorm === keyNorm);
+
+    if (!correct) {
+      explanation =
+        'Check subscripts and overall charge balance. Here is what you entered: ' +
+        renderUserFormulaInput(ansRaw);
+    }
+  }
+
+  if (correct) {
+    feedback.className = 'correct';
+
+    if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+        mode === 'nameMolecular' || mode === 'nameAcid' ||
+        mode === 'nameHydrate') {
+      feedback.innerHTML =
+        'Excellent! Correct: "' + currentQuestion.answer +
+        '". (Attempt ' + attemptCount + '.)';
+    } else {
+      feedback.innerHTML =
+        'Nice work! Correct formula: ' +
+        renderFormula(currentQuestion.answer) +
+        ' (Attempt ' + attemptCount + '.)';
+    }
+
+    showAnsBtn.style.display = 'none';
+    return;
+  }
+
+  if (attemptCount < MAX_ATTEMPTS_BEFORE_CHECK) {
+    feedback.className = 'incorrect';
+
+    if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+        mode === 'nameMolecular' || mode === 'nameAcid' ||
+        mode === 'nameHydrate') {
+      feedback.innerHTML =
+        explanation +
+        ' Attempt ' + attemptCount +
+        ' of ' + MAX_ATTEMPTS_BEFORE_CHECK +
+        '. Try again using the naming rules.';
+    } else {
+      feedback.innerHTML =
+        explanation +
+        ' Attempt ' + attemptCount +
+        ' of ' + MAX_ATTEMPTS_BEFORE_CHECK +
+        '. Try again—make sure total positive and negative charges match.';
+    }
+
+    showAnsBtn.style.display = 'none';
+  } else {
+    feedback.className = 'incorrect';
+
+    if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+        mode === 'nameMolecular' || mode === 'nameAcid' ||
+        mode === 'nameHydrate') {
+      feedback.innerHTML =
+        explanation +
+        ' You have made ' + attemptCount +
+        ' attempts. You may click "Show correct answer" if you are stuck.';
+    } else {
+      feedback.innerHTML =
+        explanation +
+        '<br>You have made ' + attemptCount +
+        ' attempts. You may click "Show correct answer" if you are stuck.';
+    }
+
+    showAnsBtn.style.display = 'inline-block';
+  }
+}
+
+// ====== TABLES ======
+function buildIonTable() {
+  const container = document.getElementById('ionTable');
+  let html = '<table><tr><th>Type</th><th>Formula</th><th>Name</th></tr>';
+  ions.cations.forEach(c => {
+    html += '<tr><td>Cation</td><td>' + renderFormula(c.formula) +
+      '</td><td>' + c.name + '</td></tr>';
+  });
+  ions.anions.forEach(a => {
+    html += '<tr><td>Anion</td><td>' + renderFormula(a.formula) +
+      '</td><td>' + a.name + '</td></tr>';
+  });
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+function buildPrefixTable() {
+  const container = document.getElementById('prefixTable');
+  let html = '<table><tr><th>Prefix</th><th>Number</th></tr>';
+  molecularPrefixes.forEach(p => {
+    html += '<tr><td>' + p.prefix + '</td><td>' + p.value + '</td></tr>';
+  });
+  html += '</table>';
+  container.innerHTML = html;
+}
+
+// ====== EVENT LISTENERS ======
+document.getElementById('checkBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  checkAnswer();
+};
+
+document.getElementById('nextBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  newQuestion();
+};
+
+document.getElementById('mode').onchange = function () {
+  newQuestion();
+};
+
+document.getElementById('showIonsBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  buildIonTable();
+  document.getElementById('ionModal').style.display = 'block';
+};
+
+document.getElementById('showPrefixesBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  buildPrefixTable();
+  document.getElementById('prefixModal').style.display = 'block';
+};
+
+document.getElementById('answer').onkeydown = function (e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    checkAnswer();
+    return false;
+  }
+};
+
+document.getElementById('showAnsBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+
+  if (!currentQuestion) return;
+  const feedback = document.getElementById('feedback');
+  const mode = currentQuestion.type;
+
+  feedback.className = 'correct';
+
+  if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+      mode === 'nameMolecular' || mode === 'nameAcid' ||
+      mode === 'nameHydrate') {
+    feedback.innerHTML = 'Correct name: "' + currentQuestion.answer + '".';
+  } else {
+    feedback.innerHTML = 'Correct formula: ' + renderFormula(currentQuestion.answer) + '.';
+  }
+
+  document.getElementById('showAnsBtn').style.display = 'none';
+};
+
+document.getElementById('ionModal').onclick = function (e) {
+  if (e.target === this) {
+    this.style.display = 'none';
+  }
+};
+
+document.getElementById('prefixModal').onclick = function (e) {
+  if (e.target === this) {
+    this.style.display = 'none';
+  }
+};
+
+document.getElementById('showIonicRulesBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  showRules('ionic');
+};
+
+document.getElementById('showMolecularRulesBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  showRules('molecular');
+};
+
+document.getElementById('showAcidRulesBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  showRules('acids');
+};
+
+document.getElementById('showHydrateRulesBtn').onclick = function (e) {
+  if (e) e.preventDefault();
+  showRules('hydrates');
+};
+
+document.getElementById('rulesModal').onclick = function (e) {
+  if (e.target === this) {
+    this.style.display = 'none';
+  }
+};
+
+// Initialize once
+newQuestion();
+
+</script>
+
+</body>
+</html>

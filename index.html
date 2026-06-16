@@ -151,13 +151,8 @@
     transition: transform 0.14s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
   }
 
-  button:hover {
-    transform: translateY(-1px);
-  }
-
-  button:active {
-    transform: translateY(0);
-  }
+  button:hover { transform: translateY(-1px); }
+  button:active { transform: translateY(0); }
 
   button:focus-visible {
     outline: none;
@@ -170,9 +165,7 @@
     box-shadow: 0 8px 18px rgba(37, 99, 235, 0.25);
   }
 
-  #checkBtn:hover {
-    background: var(--primary-hover);
-  }
+  #checkBtn:hover { background: var(--primary-hover); }
 
   #nextBtn {
     background: var(--accent);
@@ -180,9 +173,7 @@
     box-shadow: 0 8px 18px rgba(15, 118, 110, 0.22);
   }
 
-  #nextBtn:hover {
-    background: #0b5e57;
-  }
+  #nextBtn:hover { background: #0b5e57; }
 
   #showAnsBtn {
     background: #fff7ed;
@@ -190,9 +181,7 @@
     border-color: #fed7aa;
   }
 
-  #showAnsBtn:hover {
-    background: #ffedd5;
-  }
+  #showAnsBtn:hover { background: #ffedd5; }
 
   #showIonsBtn,
   #showPrefixesBtn,
@@ -244,6 +233,16 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--muted);
+  }
+
+  #gameStatus {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+
+  #gameResults {
+    margin-top: 16px;
   }
 
   .modal {
@@ -301,17 +300,10 @@
     font-weight: 800;
   }
 
-  tr:nth-child(even) td {
-    background: #fcfdff;
-  }
+  tr:nth-child(even) td { background: #fcfdff; }
 
-  ul {
-    padding-left: 1.2rem;
-  }
-
-  li + li {
-    margin-top: 0.45rem;
-  }
+  ul { padding-left: 1.2rem; }
+  li + li { margin-top: 0.45rem; }
 
   code {
     background: #eff6ff;
@@ -322,51 +314,25 @@
   }
 
   @media (min-width: 720px) {
-    .controls-grid {
-      gap: 20px;
-    }
-
+    .controls-grid { gap: 20px; }
     .answer-row {
       grid-template-columns: 1fr auto auto auto;
       align-items: end;
     }
-
-    .answer-row label {
-      grid-column: 1 / -1;
-    }
-
-    #answer {
-      min-width: 280px;
-    }
+    .answer-row label { grid-column: 1 / -1; }
+    #answer { min-width: 280px; }
   }
 
   @media (max-width: 640px) {
-    .page {
-      padding: 18px 12px 32px;
-    }
-
-    .app-card {
-      padding: 16px;
-      border-radius: 18px;
-    }
-
-    #prompt {
-      font-size: 1.1rem;
-      min-height: 70px;
-      padding: 14px 16px;
-    }
-
+    .page { padding: 18px 12px 32px; }
+    .app-card { padding: 16px; border-radius: 18px; }
+    #prompt { font-size: 1.1rem; min-height: 70px; padding: 14px 16px; }
     .button-row,
     .resource-row,
-    .rules-row {
-      flex-direction: column;
-    }
-
+    .rules-row { flex-direction: column; }
     .button-row button,
     .resource-row button,
-    .rules-row button {
-      width: 100%;
-    }
+    .rules-row button { width: 100%; }
   }
 </style>
 </head>
@@ -384,82 +350,110 @@
     </div>
 
     <div class="app-card">
-      <label for="mode">Practice type:</label>
-      <select id="mode">
-      <option value="1">1. Name the ion (formula → name)</option>
-      <option value="2">2. Write ion formula (name → formula)</option>
-      <option value="3">3. Name ionic compound</option>
-      <option value="4">4. Write ionic compound formula</option>
-      <option value="5">5. Name molecular binary compound</option>
-      <option value="6">6. Write molecular binary formula</option>
-      <option value="7">7. Name acid (binary/oxy)</option>
-      <option value="8">8. Write acid formula</option>
-      <option value="9">9. Name hydrate</option>
-      <option value="10">10. Write hydrate formula</option>
+      <div class="controls-grid">
+        <div class="field-group">
+          <label for="mode">Practice type:</label>
+          <select id="mode">
+            <option value="1">1. Name the ion (formula → name)</option>
+            <option value="2">2. Write ion formula (name → formula)</option>
+            <option value="3">3. Name ionic compound</option>
+            <option value="4">4. Write ionic compound formula</option>
+            <option value="5">5. Name molecular binary compound</option>
+            <option value="6">6. Write molecular binary formula</option>
+            <option value="7">7. Name acid (binary/oxy)</option>
+            <option value="8">8. Write acid formula</option>
+            <option value="9">9. Name hydrate</option>
+            <option value="10">10. Write hydrate formula</option>
+          </select>
+        </div>
+
+        <!-- Game mode controls -->
+        <div class="field-group">
+          <label>
+            <input type="checkbox" id="gameModeToggle">
+            Enable Game Mode
+          </label>
+        </div>
+
+        <div class="field-group" id="gameOptions" style="display:none;">
+          <label for="gameQuestionCount">Questions in this game</label>
+          <select id="gameQuestionCount">
+            <option value="5">5 questions</option>
+            <option value="10">10 questions</option>
+            <option value="15">15 questions</option>
+            <option value="20">20 questions</option>
+            <option value="25">25 questions</option>
+          </select>
+        </div>
+
+        <div id="prompt"></div>
+
+        <div class="answer-row">
+          <label for="answer">Your answer:</label>
+          <input id="answer" type="text" size="40" autocomplete="off">
+          <div class="button-row">
+            <button id="checkBtn" type="button">Check Answer</button>
+            <button id="nextBtn" type="button">Next Question</button>
+            <button id="showAnsBtn" type="button">Show Correct Answer</button>
+          </div>
+        </div>
+
+        <div id="feedback"></div>
+        <div id="gameStatus"></div>
+
+        <div class="section-label">Reference tools</div>
+        <div class="resource-row">
+          <button id="showIonsBtn" type="button">Show Ion Table</button>
+          <button id="showPrefixesBtn" type="button">Show Prefixes</button>
+        </div>
+
+        <h2>Chemical Nomenclature Rules</h2>
+
+        <div class="section-label">Naming rules</div>
+        <div class="rules-row">
+          <button id="showIonicRulesBtn" type="button">Naming Ionic Compounds</button>
+          <button id="showMolecularRulesBtn" type="button">Naming Molecular Compounds</button>
+          <button id="showAcidRulesBtn" type="button">Naming Acids</button>
+          <button id="showHydrateRulesBtn" type="button">Naming Hydrates</button>
+        </div>
+
+        <div id="gameResults"></div>
+      </div>
     </div>
   </div>
-</select>
 
-<div id="prompt"></div>
-
-<div class="answer-row">
-  <label for="answer">Your answer:</label>
-  <input id="answer" type="text" size="40" autocomplete="off">
-  <button id="checkBtn" type="button">Check Answer</button>
-  <button id="nextBtn" type="button">Next Question</button>
-  <button id="showAnsBtn" type="button">Show Correct Answer</button>
-</div>
-
-<div id="feedback"></div>
-
-<div class="section-label">Reference tools</div>
-<div class="resource-row">
-  <button id="showIonsBtn" type="button">Show Ion Table</button>
-  <button id="showPrefixesBtn" type="button">Show Prefixes</button>
-</div>
-
-<h2>Chemical Nomenclature Rules</h2>
-
-<div class="section-label">Naming rules</div>
-<div class="rules-row">
-  <button id="showIonicRulesBtn" type="button">Naming Ionic Compounds</button>
-  <button id="showMolecularRulesBtn" type="button">Naming Molecular Compounds</button>
-  <button id="showAcidRulesBtn" type="button">Naming Acids</button>
-  <button id="showHydrateRulesBtn" type="button">Naming Hydrates</button>
-</div>
-
-<!-- Ion table modal -->
-<div id="ionModal" class="modal">
-  <div class="modal-content">
-    <button onclick="document.getElementById('ionModal').style.display='none'">
-      Close
-    </button>
-    <h2>Ions used in practice</h2>
-    <div id="ionTable"></div>
+  <!-- Ion table modal -->
+  <div id="ionModal" class="modal">
+    <div class="modal-content">
+      <button onclick="document.getElementById('ionModal').style.display='none'">
+        Close
+      </button>
+      <h2>Ions used in practice</h2>
+      <div id="ionTable"></div>
+    </div>
   </div>
-</div>
 
-<!-- Prefix modal -->
-<div id="prefixModal" class="modal">
-  <div class="modal-content">
-    <button onclick="document.getElementById('prefixModal').style.display='none'">
-      Close
-    </button>
-    <h2>Greek prefixes</h2>
-    <div id="prefixTable"></div>
+  <!-- Prefix modal -->
+  <div id="prefixModal" class="modal">
+    <div class="modal-content">
+      <button onclick="document.getElementById('prefixModal').style.display='none'">
+        Close
+      </button>
+      <h2>Greek prefixes</h2>
+      <div id="prefixTable"></div>
+    </div>
   </div>
-</div>
 
-<!-- Rules modal -->
-<div id="rulesModal" class="modal">
-  <div class="modal-content">
-    <button onclick="document.getElementById('rulesModal').style.display='none'">
-      Close
-    </button>
-    <h2 id="rulesTitle"></h2>
-    <div id="rulesContent"></div>
+  <!-- Rules modal -->
+  <div id="rulesModal" class="modal">
+    <div class="modal-content">
+      <button onclick="document.getElementById('rulesModal').style.display='none'">
+        Close
+      </button>
+      <h2 id="rulesTitle"></h2>
+      <div id="rulesContent"></div>
+    </div>
   </div>
-</div>
 
 <script>
 // ====== DATA ======
@@ -687,7 +681,6 @@ const namingRules = {
       <p><strong>Example:</strong> FeCl₃ = iron(III) chloride.</p>
     `
   },
-
   molecular: {
     title: 'Rules for Naming Molecular Compounds',
     html: `
@@ -701,7 +694,6 @@ const namingRules = {
       <p><strong>Example:</strong> N₂O₄ = dinitrogen tetroxide. </p>
     `
   },
-
   acids: {
     title: 'Rules for Naming Acids',
     html: `
@@ -715,7 +707,6 @@ const namingRules = {
       <p><strong>Examples:</strong> HNO₃ = nitric acid; HNO₂ = nitrous acid.</p>
     `
   },
-
   hydrates: {
     title: 'Rules for Naming Hydrates',
     html: `
@@ -730,7 +721,90 @@ const namingRules = {
   }
 };
 
-// ====== FORMULA / ION UTILITIES ======
+// ------------ GAME MODE STATE ------------
+let currentQuestion = null;
+let attemptCount = 0;
+const MAX_ATTEMPTS_BEFORE_CHECK = 3;
+
+let gameMode = false;
+let gameQuestionTotal = 0;
+let gameScore = 0;
+let gamePenaltyHelp = 0;
+let gameLog = []; // entries: { mode, question, correctAnswer, userAnswers, usedHelp, maxPoints, remainingPoints, gotCorrect }
+
+const categoryLabels = {
+  nameIon: 'Ions',
+  ionFormula: 'Ions',
+  nameIonicCompound: 'Ionic compounds',
+  ionicFormula: 'Ionic compounds',
+  nameMolecular: 'Molecular compounds',
+  molecularFormula: 'Molecular compounds',
+  nameAcid: 'Acids',
+  acidFormula: 'Acids',
+  nameHydrate: 'Hydrates',
+  hydrateFormula: 'Hydrates'
+};
+
+const gameModeToggle = document.getElementById('gameModeToggle');
+const gameOptions = document.getElementById('gameOptions');
+const gameQuestionCountEl = document.getElementById('gameQuestionCount');
+const gameStatus = document.getElementById('gameStatus');
+const gameResults = document.getElementById('gameResults');
+
+function resetGameState() {
+  gameQuestionTotal = gameMode ? parseInt(gameQuestionCountEl.value, 10) : 0;
+  gameScore = 0;
+  gamePenaltyHelp = 0;
+  gameLog = [];
+  gameResults.innerHTML = '';
+  gameStatus.textContent = '';
+}
+
+function updateGameStatus() {
+  if (!gameMode) {
+    gameStatus.textContent = '';
+    return;
+  }
+
+  const currentNumber = Math.min(gameLog.length, gameQuestionTotal);
+
+  gameStatus.textContent =
+    'Game mode: ' +
+    (currentNumber < gameQuestionTotal
+      ? 'Question ' + currentNumber + ' of ' + gameQuestionTotal
+      : 'Game finished') +
+    ' | Score: ' + gameScore + ' pts' +
+    (gamePenaltyHelp < 0 ? ' (Help penalties: ' + gamePenaltyHelp + ' pts)' : '');
+}
+
+gameModeToggle.onchange = function () {
+  gameMode = this.checked;
+  gameOptions.style.display = gameMode ? 'block' : 'none';
+  resetGameState();
+  newQuestion();
+};
+
+gameQuestionCountEl.onchange = function () {
+  if (gameMode) {
+    resetGameState();
+    newQuestion();
+  }
+};
+
+// ------------ HELP PENALTY ------------
+function applyHelpPenaltyForCurrentQuestion() {
+  if (!gameMode) return;
+  const idx = gameLog.length - 1;
+  if (idx < 0) return;
+  const entry = gameLog[idx];
+  entry.usedHelp = true;
+  gameScore -= 1;
+  gamePenaltyHelp -= 1;
+  if (gameScore < 0) gameScore = 0;
+  updateGameStatus();
+}
+
+// ====== UTILITIES ======
 function randomItem(arr) {
   if (!Array.isArray(arr) || arr.length === 0) {
     throw new Error('randomItem received an invalid or empty array');
@@ -742,10 +816,8 @@ function splitFormulaAndCharge(raw) {
   let s = String(raw || '').trim();
   if (!s) return { base: '', charge: '' };
 
-  // normalize accidental single-charge caret notation
   s = s.replace(/\^1(?=[+-]$)/, '');
 
-  // explicit multi-charge only with caret, e.g. Fe^2+, SO4^2-
   const caretMatch = s.match(/\^(\d+)([+-])$/);
   if (caretMatch) {
     return {
@@ -754,7 +826,6 @@ function splitFormulaAndCharge(raw) {
     };
   }
 
-  // trailing + or - means a single charge only
   const lastChar = s.slice(-1);
   if (lastChar === '+' || lastChar === '-') {
     return {
@@ -882,7 +953,6 @@ function orderNonmetalsByConvention(sym1, sym2) {
   const i2 = molecularOrder.indexOf(sym2);
 
   if (i1 === -1 || i2 === -1) {
-    // Fallback: keep original order if something is missing
     return [sym1, sym2];
   }
 
@@ -890,25 +960,20 @@ function orderNonmetalsByConvention(sym1, sym2) {
 }
 
 function makeRandomMolecular() {
-  // Pick two different nonmetals
   let e1 = randomItem(binaryNonMetals);
   let e2 = randomItem(binaryNonMetals);
   while (e2.symbol === e1.symbol) {
     e2 = randomItem(binaryNonMetals);
   }
 
-  // Order them so the less electronegative (by convention list) is first
   const [symFirst, symSecond] = orderNonmetalsByConvention(e1.symbol, e2.symbol);
 
-  // Re-bind element objects so their base/anion names match the ordered symbols
   let first = binaryNonMetals.find(e => e.symbol === symFirst);
   let second = binaryNonMetals.find(e => e.symbol === symSecond);
 
-  // Random subscripts 1–3
   const n1 = Math.floor(Math.random() * 3) + 1;
   const n2 = Math.floor(Math.random() * 3) + 1;
 
-  // Build formula with ordered symbols
   const formula =
     first.symbol + (n1 === 1 ? '' : n1) +
     second.symbol + (n2 === 1 ? '' : n2);
@@ -918,11 +983,9 @@ function makeRandomMolecular() {
     return molecularPrefixes.find(p => p.value === n).prefix;
   }
 
-  // First element name: omit "mono" when n1 = 1
   const p1 = prefix(n1, true);
   const left = p1 ? (p1 + first.baseName) : first.baseName;
 
-  // Second element uses anion name + always keeps prefix
   const anionBase = second.anionName || (second.baseName + 'ide');
   const p2 = prefix(n2, false);
   const right = p2 + anionBase;
@@ -932,6 +995,7 @@ function makeRandomMolecular() {
   return { formula, name };
 }
 
+// ====== RULES MODAL ======
 function showRules(ruleKey) {
   const modal = document.getElementById('rulesModal');
   const title = document.getElementById('rulesTitle');
@@ -945,13 +1009,7 @@ function showRules(ruleKey) {
   modal.style.display = 'block';
 }
 
-// ====== QUESTION STATE ======
-
-let currentQuestion = null;
-let attemptCount = 0;
-let isCheckingAnswer = false;
-const MAX_ATTEMPTS_BEFORE_CHECK = 3;
-
+// ====== QUESTION GENERATION ======
 function newQuestion() {
   const modeEl = document.getElementById('mode');
   const promptDiv = document.getElementById('prompt');
@@ -970,18 +1028,14 @@ function newQuestion() {
   answerBox.focus();
 
   attemptCount = 0;
-  showAnsBtn.style.display = 'none';
+  showAnsBtn.style.display = gameMode ? 'none' : 'none';
 
   switch (mode) {
     case '1': {
-      const cations = Array.isArray(ions?.cations) ? ions.cations : [];
-      const anions = Array.isArray(ions?.anions) ? ions.anions : [];
-      const pool = cations.concat(anions);
-
+      const pool = ions.cations.concat(ions.anions);
       if (pool.length === 0) {
         throw new Error('Ion pool is empty or ions object is malformed');
       }
-
       const ion = randomItem(pool);
       currentQuestion = {
         type: 'nameIon',
@@ -993,14 +1047,10 @@ function newQuestion() {
     }
 
     case '2': {
-      const cations = Array.isArray(ions?.cations) ? ions.cations : [];
-      const anions = Array.isArray(ions?.anions) ? ions.anions : [];
-      const pool = cations.concat(anions);
-
+      const pool = ions.cations.concat(ions.anions);
       if (pool.length === 0) {
         throw new Error('Ion pool is empty or ions object is malformed');
       }
-
       const ion = randomItem(pool);
       currentQuestion = {
         type: 'ionFormula',
@@ -1103,10 +1153,23 @@ function newQuestion() {
     default:
       throw new Error('Unknown practice mode: ' + mode);
   }
+
+  if (gameMode) {
+    gameLog.push({
+      mode: currentQuestion.type,
+      question: promptDiv.textContent || '',
+      correctAnswer: currentQuestion.answer,
+      userAnswers: [],
+      usedHelp: false,
+      maxPoints: 5,
+      remainingPoints: 5,
+      gotCorrect: false
+    });
+    updateGameStatus();
+  }
 }
 
 // ====== CHECKING & FEEDBACK ======
-
 function checkAnswer() {
   if (!currentQuestion) return;
 
@@ -1117,6 +1180,82 @@ function checkAnswer() {
   const mode = currentQuestion.type;
   const showAnsBtn = document.getElementById('showAnsBtn');
 
+  if (gameMode) {
+    const entry = gameLog[gameLog.length - 1];
+    if (!entry) return;
+
+    entry.userAnswers.push(ansRaw);
+
+    if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+        mode === 'nameMolecular' || mode === 'nameAcid' ||
+        mode === 'nameHydrate') {
+      const user = normalizeNameInput(ansRaw);
+      const key = normalizeNameInput(currentQuestion.answer);
+      entry.gotCorrect = (user === key);
+    } else {
+      const userNorm = normalizeFormulaInput(ansRaw);
+      const keyNorm = normalizeFormulaInput(currentQuestion.answer);
+      entry.gotCorrect = (userNorm === keyNorm);
+    }
+
+    const attemptNumber = entry.userAnswers.length; // 1–3
+
+    if (entry.gotCorrect) {
+      gameScore += entry.remainingPoints;
+
+      feedback.className = 'correct';
+      if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+          mode === 'nameMolecular' || mode === 'nameAcid' ||
+          mode === 'nameHydrate') {
+        feedback.innerHTML =
+          'Correct on attempt ' + attemptNumber +
+          '! You earned ' + entry.remainingPoints + ' points. "' +
+          currentQuestion.answer + '".';
+      } else {
+        feedback.innerHTML =
+          'Correct on attempt ' + attemptNumber +
+          '! You earned ' + entry.remainingPoints + ' points. ' +
+          'Correct formula: ' + renderFormula(currentQuestion.answer) + '.';
+      }
+
+      showAnsBtn.style.display = 'none';
+      updateGameStatus();
+      return;
+    }
+
+    // Wrong answer
+    if (entry.remainingPoints > 0) {
+      entry.remainingPoints -= 1;
+    }
+
+    feedback.className = 'incorrect';
+
+    if (attemptNumber < 3) {
+      let hint;
+      if (mode === 'nameIon' || mode === 'nameIonicCompound' ||
+          mode === 'nameMolecular' || mode === 'nameAcid' ||
+          mode === 'nameHydrate') {
+        hint = 'Check capitalization, spaces, and suffixes (-ide, -ate, -ic, etc.).';
+      } else {
+        hint = 'Check subscripts and overall charge balance.';
+      }
+
+      feedback.innerHTML =
+        'Incorrect (attempt ' + attemptNumber + ' of 3). ' +
+        hint +
+        ' Remaining points for this question: ' + entry.remainingPoints + '.';
+    } else {
+      feedback.innerHTML =
+        'Incorrect (attempt 3 of 3). No more attempts for this question. ' +
+        'Click "Next Question" to continue.';
+    }
+
+    showAnsBtn.style.display = 'none';
+    updateGameStatus();
+    return;
+  }
+
+  // ---------- Practice mode (unchanged) ----------
   let correct = false;
   let explanation = '';
 
@@ -1205,6 +1344,65 @@ function checkAnswer() {
   }
 }
 
+// ------------ FINISH GAME ------------
+function finishGame() {
+  const byCategory = {};   // { label: { correct, total } }
+  const wrongDetails = []; // questions never answered correctly
+
+  gameLog.forEach(entry => {
+    const label = categoryLabels[entry.mode] || 'Other';
+    if (!byCategory[label]) byCategory[label] = { correct: 0, total: 0 };
+    byCategory[label].total += 1;
+
+    if (entry.gotCorrect) {
+      byCategory[label].correct += 1;
+    } else {
+      wrongDetails.push({
+        category: label,
+        question: entry.question,
+        correctAnswer: entry.correctAnswer,
+        attempts: entry.userAnswers.slice()
+      });
+    }
+  });
+
+  let html = '<h3>Game Results</h3>';
+  html += '<p>Total score: <strong>' + gameScore + ' pts</strong>';
+  if (gamePenaltyHelp < 0) {
+    html += ' (includes ' + gamePenaltyHelp + ' pts from help penalties)';
+  }
+  html += '</p>';
+
+  html += '<table><tr><th>Category</th><th>Correct</th><th>Total</th></tr>';
+  Object.keys(byCategory).forEach(label => {
+    const cat = byCategory[label];
+    html += '<tr><td>' + label + '</td><td>' + cat.correct + '</td><td>' + cat.total + '</td></tr>';
+  });
+  html += '</table>';
+
+  if (wrongDetails.length > 0) {
+    html += '<h4>Review your incorrect questions</h4>';
+    html += '<ul>';
+    wrongDetails.forEach(item => {
+      html += '<li><strong>' + item.category + '</strong><br>';
+      html += 'Prompt: ' + item.question + '<br>';
+      html += 'Correct answer: ' + item.correctAnswer + '<br>';
+      if (item.attempts.length > 0) {
+        html += 'Your attempts: ' + item.attempts.map(a => a || '[blank]').join('; ');
+      } else {
+        html += 'No answer entered.';
+      }
+      html += '</li>';
+    });
+    html += '</ul>';
+  } else {
+    html += '<p>You answered every question correctly within the allowed attempts. Well done!</p>';
+  }
+
+  gameResults.innerHTML = html;
+  gameStatus.textContent = 'Game finished | Final score: ' + gameScore + ' pts';
+}
+
 // ====== TABLES ======
 function buildIonTable() {
   const container = document.getElementById('ionTable');
@@ -1231,6 +1429,15 @@ function buildPrefixTable() {
   container.innerHTML = html;
 }
 
+// ====== MODAL BACKGROUND CLOSE ======
+function setupModalBackgroundClose(modalId) {
+  const modal = document.getElementById(modalId);
+  if (!modal) return;
+  modal.onclick = function (e) {
+    if (e.target === modal) modal.style.display = 'none';
+  };
+}
+
 // ====== EVENT LISTENERS ======
 document.getElementById('checkBtn').onclick = function (e) {
   if (e) e.preventDefault();
@@ -1239,10 +1446,21 @@ document.getElementById('checkBtn').onclick = function (e) {
 
 document.getElementById('nextBtn').onclick = function (e) {
   if (e) e.preventDefault();
-  newQuestion();
+  if (gameMode) {
+    if (gameLog.length >= gameQuestionTotal) {
+      finishGame();
+    } else {
+      newQuestion();
+    }
+  } else {
+    newQuestion();
+  }
 };
 
 document.getElementById('mode').onchange = function () {
+  if (gameMode) {
+    resetGameState();
+  }
   newQuestion();
 };
 
@@ -1250,12 +1468,14 @@ document.getElementById('showIonsBtn').onclick = function (e) {
   if (e) e.preventDefault();
   buildIonTable();
   document.getElementById('ionModal').style.display = 'block';
+  applyHelpPenaltyForCurrentQuestion();
 };
 
 document.getElementById('showPrefixesBtn').onclick = function (e) {
   if (e) e.preventDefault();
   buildPrefixTable();
   document.getElementById('prefixModal').style.display = 'block';
+  applyHelpPenaltyForCurrentQuestion();
 };
 
 document.getElementById('answer').onkeydown = function (e) {
@@ -1268,8 +1488,7 @@ document.getElementById('answer').onkeydown = function (e) {
 
 document.getElementById('showAnsBtn').onclick = function (e) {
   if (e) e.preventDefault();
-
-  if (!currentQuestion) return;
+  if (!currentQuestion || gameMode) return;
   const feedback = document.getElementById('feedback');
   const mode = currentQuestion.type;
 
@@ -1286,47 +1505,34 @@ document.getElementById('showAnsBtn').onclick = function (e) {
   document.getElementById('showAnsBtn').style.display = 'none';
 };
 
-document.getElementById('ionModal').onclick = function (e) {
-  if (e.target === this) {
-    this.style.display = 'none';
-  }
-};
-
-document.getElementById('prefixModal').onclick = function (e) {
-  if (e.target === this) {
-    this.style.display = 'none';
-  }
-};
-
 document.getElementById('showIonicRulesBtn').onclick = function (e) {
   if (e) e.preventDefault();
   showRules('ionic');
+  applyHelpPenaltyForCurrentQuestion();
 };
 
 document.getElementById('showMolecularRulesBtn').onclick = function (e) {
   if (e) e.preventDefault();
   showRules('molecular');
+  applyHelpPenaltyForCurrentQuestion();
 };
 
 document.getElementById('showAcidRulesBtn').onclick = function (e) {
   if (e) e.preventDefault();
   showRules('acids');
+  applyHelpPenaltyForCurrentQuestion();
 };
 
 document.getElementById('showHydrateRulesBtn').onclick = function (e) {
   if (e) e.preventDefault();
   showRules('hydrates');
+  applyHelpPenaltyForCurrentQuestion();
 };
 
-document.getElementById('rulesModal').onclick = function (e) {
-  if (e.target === this) {
-    this.style.display = 'none';
-  }
-};
-
-// Initialize once
+setupModalBackgroundClose('ionModal');
+setupModalBackgroundClose('prefixModal');
+setupModalBackgroundClose('rulesModal');
 newQuestion();
-
 </script>
 
 </body>
